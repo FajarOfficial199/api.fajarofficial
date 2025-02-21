@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fajar API</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            animation: fadeInUp 0.8s ease-in-out;
+        }
+
+        /* Animasi Masuk */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    /* Kotak nilai Parameter */
+    .param-value {
+        background: black;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px cyan;
+        margin-bottom: 10px;
+    }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 10px cyan;
+            border-radius: 8px;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        /* Title */
+        .title { 
+            font-size: 32px; 
+            font-weight: bold; 
+            text-shadow: 0 0 10px cyan; 
+            margin-top: 10px; 
+        }
+
+        /* Search Box */
+        .search-box {
+            width: 80%;
+            padding: 12px;
+            border: 2px solid cyan;
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        /* API Box */
+        .box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px auto;
+            width: 85%;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        /* API List */
+        .api-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 0 10px cyan;
+            flex-wrap: wrap;
+        }
+
+        /* Button Wrapper */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn.try { background-color: cyan; color: black; }
+        .btn.get { background-color: yellow; color: black; }
+
+        /* Animasi Hover */
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px white;
+        }
+
+        /* Modal (GET API) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px cyan;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .modal .api-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 0 10px cyan;
+            color: cyan;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+
+        .modal button {
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .modal .copy-btn { background: cyan; color: black; }
+        .modal .close-btn { background: red; color: white; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div id="clock">Waktu: --:--:--</div>
+        <div id="battery" class="battery">🔋 --%</div>
+    </div>
+
+    <h1 class="title">FAJAR <span style="color: cyan;">API</span></h1>
+    <p>Powered by Fajar Official</p>
+
+    <input type="text" id="search" class="search-box" placeholder="Cari API..." onkeyup="filterAPI()">
+
+    <!-- API Box -->
+    <div class="box">
+        <h2>Downloader</h2>
+
+        <div class="api-item" data-api="mediafire">
+            <span>Mediafire</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/mediafire?url=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="mediafire">
+            <span>Pinterest</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/pin?text=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="mediafire">
+            <span>Youtube Play</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/play?text=')">TRY</button>
+            </div>
+        </div>
+        
+                <div class="api-item" data-api="mediafire">
+            <span>Ytmp3</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/ytmp3?url=')">TRY</button>
+            </div>
+        </div>
+        
+                <div class="api-item" data-api="mediafire">
+            <span>Ytmp4</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/ytmp4?url=')">TRY</button>
+            </div>
+        </div>
+
+        <div class="api-item" data-api="tiktok">
+            <span>TikTok</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/tiktok?url=')">TRY</button>
+            </div>
+        </div>
+
+        <div class="api-item" data-api="capcut">
+            <span>Instragam</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/igdl?url=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Capcut</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/downloader/capcut?url=')">TRY</button>
+            </div>
+        </div>
+        
+        </div>
+    <div class="box">
+        <h2>ISLAMIC</h2>
+        
+        <div class="api-item" data-api="subuh">
+    <span>Niat Sholat Subuh</span>
+    <div class="btn-group">
+        <button class="btn try" onclick="tryAPI('/api/islam/niatsubuh')">TRY</button>
+    </div>
+</div>
+
+<div class="api-item" data-api="dzuhur">
+    <span>Niat Sholat Dzuhur</span>
+    <div class="btn-group">
+        <button class="btn try" onclick="tryAPI('/api/islam/niatdzuhur')">TRY</button>
+    </div>
+</div>
+
+<div class="api-item" data-api="ashar">
+    <span>Niat Sholat Ashar</span>
+    <div class="btn-group">
+        <button class="btn try" onclick="tryAPI('/api/islam/niatashar')">TRY</button>
+    </div>
+</div>
+
+<div class="api-item" data-api="maghrib">
+    <span>Niat Sholat Maghrib</span>
+    <div class="btn-group">
+        <button class="btn try" onclick="tryAPI('/api/islam/niatmaghrib')">TRY</button>
+    </div>
+</div>
+
+<div class="api-item" data-api="isya">
+    <span>Niat Sholat Isya</span>
+    <div class="btn-group">
+        <button class="btn try" onclick="tryAPI('/api/islam/niatisya')">TRY</button>
+    </div>
+</div>
+        
+        </div>
+        
+            <div class="box">
+        <h2>SEARCHING BROWSER</h2>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Tiktok Search</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/search/tiktok?text=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Anime Search</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/search/anime?nama=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Playstore Search</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/search/playstore?nama=')">TRY</button>
+            </div>
+        </div>
+        
+        </div>
+                <div class="box">
+        <h2>STALKER</h2>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Npm Stalk</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/stalker/npm?package=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Tiktok Stalk</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/stalker/tiktok?username=')">TRY</button>
+            </div>
+        </div>
+        
+        
+        </div>
+        <div class="box">
+        <h2>STATUS GAME SERVER</h2>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Gta Samp</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/game/samp?ip=&port=')">TRY</button>
+            </div>
+        </div>
+        
+        <div class="api-item" data-api="capcut">
+            <span>Minecraft</span>
+            <div class="btn-group">
+                <button class="btn try" onclick="tryAPI('/api/game/minecraft?host=&port=')">TRY</button>
+            </div>
+        </div>
+        
+        </div>
+
+    <script>
+        
+        function tryAPI(url) {
+            window.open(url, "_blank");
+        }
+
+
+        function filterAPI() {
+            let search = document.getElementById("search").value.toLowerCase();
+            let apis = document.querySelectorAll(".api-item");
+
+            apis.forEach(api => {
+                let text = api.getAttribute("data-api");
+                api.style.display = text.includes(search) ? "flex" : "none";
+            });
+        }
+
+        function updateClock() {
+            let now = new Date().toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta" });
+            document.getElementById("clock").textContent = "Waktu: " + now;
+        }
+        setInterval(updateClock, 1000);
+
+        navigator.getBattery().then(battery => {
+            function updateBattery() {
+                let level = Math.round(battery.level * 100);
+                document.getElementById("battery").textContent = `🔋 ${level}%`;
+            }
+            updateBattery();
+            battery.addEventListener("levelchange", updateBattery);
+        });
+    </script>
+
+</body>
+</html>
