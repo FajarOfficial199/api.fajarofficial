@@ -629,7 +629,7 @@ app.get("/api/downloader/ytmp4", async (req, res) => {
     
     try {
         const results = await ptz.ytVideo(url);
-        res.json({ Status: true, Creator: creator, results });
+        res.render("video", { video: results });
     } catch (error) {
         res.status(500).json({ Status: false, message: "Error fetching video details", error: error.message });
     }
