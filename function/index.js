@@ -6,5 +6,6 @@ module.exports = {
   getServerStatus: require('./scraper/samp'),
   tiktokStalk: require('./scraper/tiktokstalk'),
   capcutdl: require('./scraper/capcutdl'),
-  pinterest: require('./scraper/pinterest')
+  pinterest: require('./scraper/pinterest'),
+  ytVideo: require('./scraper/ytmp4')
 }
