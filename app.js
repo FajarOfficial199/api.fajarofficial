@@ -5,7 +5,7 @@ const cors = require("cors");
 const axios = require("axios")
 const search = require("yt-search");
 const { youtube } = require("btch-downloader");
-const ytdl = require("hybrid-ytdl");
+const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
 const fs = require("fs");
 const util = require('minecraft-server-util');
@@ -595,32 +595,6 @@ app.get('/api/downloader/pin/', async (req, res) => {
     }
 });
 
-app.get("/api/downloader/ytmp3", async (req, res) => {
-    const url = req.query.url;
-    if (!url || !ytdl.validateURL(url)) {
-        return res.status(400).json({ status: false, message: "Invalid URL" });
-    }
-
-    try {
-        const info = await ytdl.getInfo(url);
-        const audioFormat = ytdl.filterFormats(info.formats, "audioonly")[0];
-        
-        res.json({
-            status: true,
-            creator: creator,
-            results: {
-                title: info.videoDetails.title,
-                thumbnail: info.videoDetails.thumbnails.pop().url,
-                duration: info.videoDetails.lengthSeconds,
-                format: audioFormat.mimeType,
-                url: audioFormat.url
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ status: false, message: "Error fetching video info", error: error.message });
-    }
-});
-
 app.get("/api/downloader/ytmp4", async (req, res) => {
     const url = req.query.url;
     if (!url) {
@@ -628,19 +602,50 @@ app.get("/api/downloader/ytmp4", async (req, res) => {
     }
     
     try {
-        const info = await ytdl.getInfo(url);
-        const format = ytdl.chooseFormat(info.formats, { quality: "highestvideo" });
+        const info = await getVideoInfo(url);
+        if (!info.status) return res.status(400).json({ Status: false, message: "Failed to get video info" });
+
+        const video = await downloadVideo(url, "720");
+        if (!video.status) return res.status(400).json({ Status: false, message: "Failed to get video download link" });
 
         res.json({
             Status: true,
             Creator: creator,
-            title: info.videoDetails.title,
-            duration: info.videoDetails.lengthSeconds,
-            thumbnail: info.videoDetails.thumbnails.pop().url,
-            videoUrl: format.url
+            title: info.title,
+            uploader: info.creator,
+            duration: info.duration,
+            source: video.source,
+            downloadUrl: video.downloadUrl
         });
     } catch (error) {
-        res.status(500).json({ Status: false, message: "Error fetching video details", error: error.message });
+        res.status(500).json({ Status: false, message: "Error processing request", error: error.message });
+    }
+});
+
+app.get("/api/downloader/ytmp3", async (req, res) => {
+    const url = req.query.url;
+    if (!url) {
+        return res.status(400).json({ Status: false, message: "URL parameter is required" });
+    }
+    
+    try {
+        const info = await getVideoInfo(url);
+        if (!info.status) return res.status(400).json({ Status: false, message: "Failed to get video info" });
+
+        const audio = await downloadAudio(url, "128");
+        if (!audio.status) return res.status(400).json({ Status: false, message: "Failed to get audio download link" });
+
+        res.json({
+            Status: true,
+            Creator: creator,
+            title: info.title,
+            uploader: info.creator,
+            duration: info.duration,
+            source: audio.source,
+            downloadUrl: audio.downloadUrl
+        });
+    } catch (error) {
+        res.status(500).json({ Status: false, message: "Error processing request", error: error.message });
     }
 });
 
