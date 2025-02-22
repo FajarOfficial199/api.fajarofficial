@@ -5,7 +5,7 @@ const cors = require("cors");
 const axios = require("axios")
 const search = require("yt-search");
 const { youtube } = require("btch-downloader");
-const ytdl = require("@distube/ytdl-core");
+const ytdl = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
 const fs = require("fs");
 const util = require('minecraft-server-util');
@@ -628,13 +628,21 @@ app.get("/api/downloader/ytmp4", async (req, res) => {
     }
     
     try {
-        const results = await ptz.ytVideo(url);
-        res.render("video", { video: results });
+        const info = await ytdl.getInfo(url);
+        const format = ytdl.chooseFormat(info.formats, { quality: "highestvideo" });
+
+        res.json({
+            Status: true,
+            Creator: creator,
+            title: info.videoDetails.title,
+            duration: info.videoDetails.lengthSeconds,
+            thumbnail: info.videoDetails.thumbnails.pop().url,
+            videoUrl: format.url
+        });
     } catch (error) {
         res.status(500).json({ Status: false, message: "Error fetching video details", error: error.message });
     }
 });
-
 
 // Route utama untuk halaman index.html
 app.get("/", (req, res) => {
