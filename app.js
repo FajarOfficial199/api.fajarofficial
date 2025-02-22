@@ -623,27 +623,15 @@ app.get("/api/downloader/ytmp3", async (req, res) => {
 
 app.get("/api/downloader/ytmp4", async (req, res) => {
     const url = req.query.url;
-    if (!url || !ytdl.validateURL(url)) {
-        return res.status(400).json({ status: false, message: "Invalid URL" });
+    if (!url) {
+        return res.status(400).json({ Status: false, message: "URL parameter is required" });
     }
-
+    
     try {
-        const info = await ytdl.getInfo(url);
-        const videoFormat = ytdl.filterFormats(info.formats, "videoonly")[0];
-        
-        res.json({
-            status: true,
-            creator: creator,
-            results: {
-                title: info.videoDetails.title,
-                thumbnail: info.videoDetails.thumbnails.pop().url,
-                duration: info.videoDetails.lengthSeconds,
-                format: videoFormat.mimeType,
-                url: videoFormat.url
-            }
-        });
+        const results = await ptz.ytVideo(url);
+        res.json({ Status: true, Creator: creator, results });
     } catch (error) {
-        res.status(500).json({ status: false, message: "Error fetching video info", error: error.message });
+        res.status(500).json({ Status: false, message: "Error fetching video details", error: error.message });
     }
 });
 
