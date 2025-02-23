@@ -26,6 +26,15 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Route utama untuk halaman index.html
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+
+app.get("/tes", (req, res) => {
+    res.sendFile(path.join(__dirname, "tes.html"));
+});
+
 // >~~~~~~~~~~ API ~~~~~~~~~~< //
 app.get('/api/downloader/mediafire', async (req, res) => {
     const url = req.query.url;
@@ -649,10 +658,6 @@ app.get("/api/downloader/ytmp3", async (req, res) => {
     }
 });
 
-// Route utama untuk halaman index.html
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
 
 // Jalankan server
 app.listen(PORT, () => {
