@@ -6,7 +6,6 @@ const axios = require("axios")
 const fetch = require("node-fetch");
 const { xnxxSearch, xnxxDownload } = require("@mr.janiya/xnxx-scraper");
 const search = require("yt-search");
-const scrapeWebsitee = require('scrape-websitee');
 const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
@@ -154,16 +153,6 @@ app.get("/api/downloader/xnxx", async (req, res) => {
     }
 });
 
-app.get('/api/downloader/spotify', async (req, res) => {
-    try {
-        const { url } = req.query;
-        if (!url) throw new Error('Parameter url diperlukan');
-        const result = await scrapeWebsitee(url);
-        res.json({ success: true, data: result });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 app.get('/api/search/tiktok', async (req, res) => {
   const text = req.query.text;  // The search query will be passed in the URL as a query parameter
@@ -338,21 +327,6 @@ app.get('/api/stalker/npm', async (req, res) => {
       }
     });
   }
-});
-
-app.get('/api/stalker/freefire', async (req, res) => {
-    const { id } = req.query; // Mengambil UID dan region dari query parameter
-    
-    if (!id) {
-        return res.status(400).json({ error: 'ID diperlukan' });
-    }
-
-    try {
-        const response = await axios.get(`https://free-ff-api-src-5plp.onrender.com/api/v1/account?region=SG&uid=${id}`);
-        res.json(response.data); // Mengirim data dari API ke klien
-    } catch (error) {
-        res.status(500).json({ error: 'Gagal mengambil data', details: error.message });
-    }
 });
 
 app.get('/api/game/samp', async (req, res) => {
