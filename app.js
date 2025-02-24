@@ -155,23 +155,23 @@ app.get("/api/downloader/xnxx", async (req, res) => {
 });
 
 app.get("/api/downloader/spotify", async (req, res) => {
-    const { url } = req.query;
-    
-    if (!url) {
-        return res.status(400).json({ error: "URL parameter is required" });
+    const { query, type } = req.query;
+
+    if (!query) {
+        return res.status(400).json({ error: "Query parameter is required" });
     }
 
     try {
-        const trackData = await downloadTrack(url);
-        const albumData = await downloadAlbum(url);
-        const searchData = await search(url);
-        
-        res.json({ 
-            success: true, 
-            track: trackData, 
-            album: albumData, 
-            search: searchData 
-        });
+        let data;
+        if (type === "track") {
+            data = await downloadTrack(query);
+        } else if (type === "album") {
+            data = await downloadAlbum(query);
+        } else {
+            data = await search(query);
+        }
+
+        res.json({ success: true, data });
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data", details: error.message });
     }
