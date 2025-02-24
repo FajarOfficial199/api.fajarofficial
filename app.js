@@ -6,7 +6,7 @@ const axios = require("axios")
 const { search, downloadTrack, downloadAlbum } = require("@nechlophomeriaa/spotifydl");
 const fetch = require("node-fetch");
 const { xnxxSearch, xnxxDownload } = require("@mr.janiya/xnxx-scraper");
-const search = require("yt-search");
+const yts = require("yt-search");
 const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
@@ -577,7 +577,7 @@ app.get("/api/downloader/play", async (req, res) => {
     }
 
     try {
-        const look = await search(text);
+        const look = await yts(text);
         const convert = look.videos[0];
         if (!convert) {
             return res.json({
