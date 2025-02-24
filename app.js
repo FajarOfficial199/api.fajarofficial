@@ -6,6 +6,7 @@ const axios = require("axios")
 const fetch = require("node-fetch");
 const { xnxxSearch, xnxxDownload } = require("@mr.janiya/xnxx-scraper");
 const search = require("yt-search");
+const scrapeWebsitee = require('scrape-websitee');
 const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
@@ -150,6 +151,17 @@ app.get("/api/downloader/xnxx", async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ Status: false, message: "Terjadi kesalahan", error: error.message });
+    }
+});
+
+app.get('/api/downloader/spotify', async (req, res) => {
+    try {
+        const { url } = req.query;
+        if (!url) throw new Error('Parameter url diperlukan');
+        const result = await scrapeWebsitee(url);
+        res.json({ success: true, data: result });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
