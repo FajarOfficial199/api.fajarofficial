@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios")
+const { search, downloadTrack, downloadAlbum } = require("@nechlophomeriaa/spotifydl");
 const fetch = require("node-fetch");
 const { xnxxSearch, xnxxDownload } = require("@mr.janiya/xnxx-scraper");
 const search = require("yt-search");
@@ -153,6 +154,28 @@ app.get("/api/downloader/xnxx", async (req, res) => {
     }
 });
 
+app.get("/api/downloader/spotify", async (req, res) => {
+    const { url } = req.query;
+    
+    if (!url) {
+        return res.status(400).json({ error: "URL parameter is required" });
+    }
+
+    try {
+        const trackData = await downloadTrack(url);
+        const albumData = await downloadAlbum(url);
+        const searchData = await search(url);
+        
+        res.json({ 
+            success: true, 
+            track: trackData, 
+            album: albumData, 
+            search: searchData 
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch data", details: error.message });
+    }
+});
 
 app.get('/api/search/tiktok', async (req, res) => {
   const text = req.query.text;  // The search query will be passed in the URL as a query parameter
