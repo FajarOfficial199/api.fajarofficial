@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios")
-const { search, downloadTrack, downloadAlbum } = require("@nechlophomeriaa/spotifydl");
+const { SpotifyDL } = require("spotifydl-core");
 const fetch = require("node-fetch");
 const { xnxxSearch, xnxxDownload } = require("@mr.janiya/xnxx-scraper");
 const yts = require("yt-search");
@@ -155,23 +155,24 @@ app.get("/api/downloader/xnxx", async (req, res) => {
 });
 
 app.get("/api/downloader/spotify", async (req, res) => {
-    const { query, type } = req.query;
+    const { query } = req.query;
 
     if (!query) {
         return res.status(400).json({ error: "Query parameter is required" });
     }
 
     try {
-        let data;
-        if (type === "track") {
-            data = await downloadTrack(query);
-        } else if (type === "album") {
-            data = await downloadAlbum(query);
-        } else {
-            data = await search(query);
-        }
-
-        res.json({ success: true, data });
+        const spotify = new SpotifyDL({ quality: "high" });
+        const trackData = await spotify.getTrack(query);
+        const albumData = await spotify.getAlbum(query);
+        const searchData = await spotify.search(query);
+        
+        res.json({ 
+            success: true, 
+            track: trackData, 
+            album: albumData, 
+            search: searchData 
+        });
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch data", details: error.message });
     }
