@@ -336,7 +336,7 @@ app.get('/api/stalker/freefire', async (req, res) => {
     }
 
     try {
-        const response = await axios.get(`https://free-ff-api-src-5plp.onrender.com/api/v1/account?region=SG&uid=${uid}`);
+        const response = await axios.get(`https://free-ff-api-src-5plp.onrender.com/api/v1/account?region=SG&uid=${id}`);
         res.json(response.data); // Mengirim data dari API ke klien
     } catch (error) {
         res.status(500).json({ error: 'Gagal mengambil data', details: error.message });
