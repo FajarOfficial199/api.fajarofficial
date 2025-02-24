@@ -328,6 +328,21 @@ app.get('/api/stalker/npm', async (req, res) => {
   }
 });
 
+app.get('/api/stalker/freefire', async (req, res) => {
+    const { uid } = req.query; // Mengambil UID dan region dari query parameter
+    
+    if (!uid || !region) {
+        return res.status(400).json({ error: 'UID diperlukan' });
+    }
+
+    try {
+        const response = await axios.get(`https://free-ff-api-src-5plp.onrender.com/api/v1/account?region=SG&uid=${uid}`);
+        res.json(response.data); // Mengirim data dari API ke klien
+    } catch (error) {
+        res.status(500).json({ error: 'Gagal mengambil data', details: error.message });
+    }
+});
+
 app.get('/api/game/samp', async (req, res) => {
     const { ip, port } = req.query;
 
