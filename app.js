@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios")
+const xnxx = require("@mr.janiya/xnxx-scraper");
 const search = require("yt-search");
 const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
@@ -129,6 +130,25 @@ app.get('/api/downloader/igdl', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Terjadi kesalahan dalam memproses permintaan." });
+    }
+});
+
+app.get("/api/downloader/xnxx", async (req, res) => {
+    try {
+        const { url } = req.query;
+        if (!url) {
+            return res.status(400).json({ Status: false, message: "Parameter 'url' wajib diisi" });
+        }
+        
+        const result = await xnxx.download(url);
+        
+        res.json({
+            Status: true,
+            Creator: creator,
+            results: result
+        });
+    } catch (error) {
+        res.status(500).json({ Status: false, message: "Terjadi kesalahan", error: error.message });
     }
 });
 
