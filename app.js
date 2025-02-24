@@ -9,7 +9,6 @@ const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
 const { randomBytes } = require('crypto');
 const fs = require("fs");
-const node-fetch = require("node-fetch")
 const util = require('minecraft-server-util');
 const malScraper = require('mal-scraper');
 
