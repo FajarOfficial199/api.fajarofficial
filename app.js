@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const axios = require("axios")
-const xnxx = require("@mr.janiya/xnxx-scraper");
+const { xnxxSearch, xnxxDownload } = require("xnxx-scraper");
 const search = require("yt-search");
 const { youtube } = require("btch-downloader");
 const { getVideoInfo, downloadVideo, downloadAudio } = require("hybrid-ytdl");
@@ -140,7 +140,7 @@ app.get("/api/downloader/xnxx", async (req, res) => {
             return res.status(400).json({ Status: false, message: "Parameter 'url' wajib diisi" });
         }
         
-        const result = await xnxx.download(url);
+        const result = await xnxxDownload(url);
         
         res.json({
             Status: true,
