@@ -329,10 +329,10 @@ app.get('/api/stalker/npm', async (req, res) => {
 });
 
 app.get('/api/stalker/freefire', async (req, res) => {
-    const { uid } = req.query; // Mengambil UID dan region dari query parameter
+    const { id } = req.query; // Mengambil UID dan region dari query parameter
     
-    if (!uid || !region) {
-        return res.status(400).json({ error: 'UID diperlukan' });
+    if (!id) {
+        return res.status(400).json({ error: 'ID diperlukan' });
     }
 
     try {
