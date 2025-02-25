@@ -1,97 +1,107 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminLTE Dashboard</title>
-    <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>REST API Mediafire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background-color: #d3d3d3;
+            padding: 30px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .box button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .box button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .api-response {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e7e7e7;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+        }
+
+        .api-response.active {
+            display: block;
+            transform: translateY(20px);
+        }
+    </style>
 </head>
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-    <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-        </ul>
-    </nav><!-- Sidebar -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="#" class="brand-link">
-        <span class="brand-text font-weight-light">Admin Panel</span>
-    </a>
-    <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-home"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>Settings</p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</aside>
+<body>
 
-<!-- Content Wrapper -->
-<div class="content-wrapper">
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row mt-3">
-                <div class="col-lg-4">
-                    <div class="card bg-info">
-                        <div class="card-body">
-                            <h5>Baterai</h5>
-                            <p id="battery-status">Memuat...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="card bg-warning">
-                        <div class="card-body">
-                            <h5>IP Address</h5>
-                            <p id="ip-address">Memuat...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="card bg-success">
-                        <div class="card-body">
-                            <h5>Jam WIB</h5>
-                            <p id="wib-time">Memuat...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="container">
+        <h1>Mediafire API</h1>
+        <div class="box" id="box">
+            <button id="btn-response">Response API</button>
         </div>
-    </section>
-</div>
 
-</div><!-- AdminLTE JS --><script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script><!-- Script Baterai, IP & Waktu --><script>
-    navigator.getBattery().then(battery => {
-        document.getElementById("battery-status").textContent = `${Math.round(battery.level * 100)}%`;
-    });
+        <div id="api-response" class="api-response">
+            <p>Data from Mediafire API will appear here...</p>
+        </div>
+    </div>
 
-    fetch('https://api64.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("ip-address").textContent = data.ip;
+    <script>
+        document.getElementById("btn-response").addEventListener("click", function() {
+            let box = document.getElementById("box");
+            let apiResponse = document.getElementById("api-response");
+
+            // Animate box color change on click
+            box.style.backgroundColor = "#4CAF50";
+            
+            // Show API response animation
+            apiResponse.classList.toggle("active");
+
+            // Simulate a fake API call and show content after a brief delay
+            setTimeout(() => {
+                apiResponse.innerHTML = "<p>Response: API data loaded from Mediafire.</p>";
+            }, 1000);
         });
+    </script>
 
-    function updateTime() {
-        const now = new Date();
-        now.setHours(now.getHours() + 7); // WIB Offset
-        document.getElementById("wib-time").textContent = now.toLocaleTimeString("id-ID");
-    }
-    setInterval(updateTime, 1000);
-</script></body>
+</body>
 </html>
