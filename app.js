@@ -39,6 +39,27 @@ app.get("/tes", (req, res) => {
 });
 
 // >~~~~~~~~~~ API ~~~~~~~~~~< //
+app.get("/api/qris/createpayment", async (req, res) => {
+    try {
+        const { qrisurl, amount } = req.query;
+
+        if (!qrisurl || !amount) {
+            return res.status(400).json({ error: "Harap sertakan qrisurl dan amount" });
+        }
+
+        // URL Justpiple QRIS Converter
+        const converterURL = `https://justpiple.github.io/qris-static-to-dynamic/?qris=${encodeURIComponent(qrisurl)}&amount=${amount}`;
+
+        res.json({
+            success: true,
+            message: "QRIS dinamis berhasil dibuat",
+            qris_dynamic_url: converterURL
+        });
+    } catch (error) {
+        console.error("Error generating QRIS:", error);
+        res.status(500).json({ error: "Terjadi kesalahan dalam pembuatan QRIS" });
+    }
+});
 app.get('/api/downloader/mediafire', async (req, res) => {
     const url = req.query.url;
     
